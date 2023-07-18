@@ -10,7 +10,7 @@ const placeholders = [
   "SLACK 🧗",
   "SNOW 🏂",
   "SCOOT 🛴",
-  ":) ... <3",
+  "... hehe <3",
   "SKATE 🛹",
   "DIVE 🌊",
   "BIKE 🚲",

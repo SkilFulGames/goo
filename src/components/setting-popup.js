@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import styled, { keyframes } from "styled-components";
+
+import gameContext from "../context/game-context";
 
 import infoFill from "../img/info-fill.svg";
 import crossOrange from "../img/cross-orange.svg";
@@ -120,10 +122,14 @@ const DoneButton = styled.button`
 `;
 
 function SettingPopUp({ isOpen, setIsOpen }) {
+  const { game, setGame } = useContext(gameContext);
+
   const [isInfo, setIsInfo] = useState(false);
   const [isHard, setIsHard] = useState(false);
   const [placeholder, setPlaceholder] = useState(0);
-  const [displayPlaceholder, setDisplayPlaceholder] = useState(true);
+  const [displayPlaceholder, setDisplayPlaceholder] = useState(
+    game.targetWord.length ? false : true
+  );
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -169,10 +175,17 @@ function SettingPopUp({ isOpen, setIsOpen }) {
                 <CustomLabel htmlFor="hardmode">Hard Mode</CustomLabel>
               </div>
               <CustomCheckbox
+                {...(game.isHard ? { checked: "checked" } : "")}
                 id="hardmode"
                 type="checkbox"
-                value={isHard}
-                onChange={() => setIsHard(!isHard)}
+                value={game.isHard}
+                onChange={() => {
+                  if (!game.isHard) {
+                    setGame({ ...game, isHard: !game.isHard, nbOfTry: 1 });
+                  } else {
+                    setGame({ ...game, isHard: !game.isHard });
+                  }
+                }}
               />
             </Row>
             <Row>
@@ -182,7 +195,15 @@ function SettingPopUp({ isOpen, setIsOpen }) {
                 </SVGInfoContainer>
                 <CustomLabel htmlFor="joker">Joker</CustomLabel>
               </div>
-              <CustomCheckbox id="joker" type="checkbox" />
+              <CustomCheckbox
+                {...(game.allowRedo ? { checked: "checked" } : "")}
+                id="joker"
+                type="checkbox"
+                value={game.allowRedo}
+                onChange={() =>
+                  setGame({ ...game, allowRedo: !game.allowRedo })
+                }
+              />
             </Row>
             <Row>
               <p style={{ color: "white", fontSize: "120%" }}>Game Of</p>
@@ -192,14 +213,30 @@ function SettingPopUp({ isOpen, setIsOpen }) {
               <input
                 id="targetword"
                 type="text"
+                value={game.targetWord}
+                onChange={(e) =>
+                  setGame({ ...game, targetWord: e.target.value })
+                }
                 onFocus={() => setDisplayPlaceholder(false)}
-                onBlur={() => setDisplayPlaceholder(true)}
+                onBlur={() => {
+                  if (game.targetWord.length === 0) {
+                    setDisplayPlaceholder(true);
+                  }
+                }}
               />
             </Row>
-            {!isHard && (
+            {!game.isHard && (
               <Row>
                 <CustomLabel htmlFor="nbtry">Nb of try</CustomLabel>
-                <input id="nbtry" type="number" min={1} placeholder="2" />
+                <input
+                  id="nbtry"
+                  type="number"
+                  min={1}
+                  value={game.nbOfTry}
+                  onChange={(e) =>
+                    setGame({ ...game, nbOfTry: e.target.value })
+                  }
+                />
               </Row>
             )}
             <Row>

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import styled, { keyframes } from "styled-components";
+import { useNavigate } from "react-router-dom";
+import styled, { keyframes, css } from "styled-components";
 
 import SettingPopup from "../components/setting-popup";
 import SharePopup from "../components/share-popup";
@@ -73,37 +74,68 @@ const zoom = keyframes`
   }
 `;
 const DynamicTitle = styled.p`
+  ${(props) =>
+    props.$animation
+      ? css`
+          animation: ${zoomOut} 0.75s 0s forwards;
+        `
+      : css`
+          animation: ${zoom} 3s 0.2s forwards;
+        `};
   margin: 0;
   font-size: 1000%;
   color: #ff9233;
-  animation: ${zoom} 3s 0.2s forwards;
+
   user-select: none;
   overflow: hidden;
+`;
+const zoomOut = keyframes`
+  0% {
+    transform: scale(2.7) rotateZ(285deg)
+  }
+  100% {
+    transform: scale(10) rotate(360deg)
+  }
 `;
 
 function Home() {
   const title = "goo";
 
+  const navigate = useNavigate();
+
   const [isSettingOpen, setIsSettingOpen] = useState(false);
   const [isShareOpen, setIsShareOpen] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
 
   return (
     <PageWrapper>
       {isSettingOpen && <SettingPopup setIsOpen={setIsSettingOpen} />}
       {isShareOpen && <SharePopup setIsOpen={setIsShareOpen} />}
-      <ButtonsContainer>
-        <SVGSettingContainer onClick={() => setIsSettingOpen(true)}>
-          <SVGSetting src={gearFill} alt="gear-fill" />
-        </SVGSettingContainer>
-        <SVGPlayContainer>
-          <SVGPlay src={playCircle} alt="play-circle" />
-        </SVGPlayContainer>
-        <SVGShareContainer onClick={() => setIsShareOpen(true)}>
-          <SVGShare src={heartFill} alt="heart-fill" />
-        </SVGShareContainer>
-      </ButtonsContainer>
+      {!isAnimating && (
+        <ButtonsContainer>
+          <SVGSettingContainer onClick={() => setIsSettingOpen(true)}>
+            <SVGSetting src={gearFill} alt="gear-fill" />
+          </SVGSettingContainer>
+          <SVGPlayContainer
+            onClick={() => {
+              setTimeout(() => navigate("/player"), 500);
+              setIsAnimating(true);
+            }}
+          >
+            <SVGPlay src={playCircle} alt="play-circle" />
+          </SVGPlayContainer>
+          <SVGShareContainer onClick={() => setIsShareOpen(true)}>
+            <SVGShare src={heartFill} alt="heart-fill" />
+          </SVGShareContainer>
+        </ButtonsContainer>
+      )}
       <DynamicTitleContainer>
-        <DynamicTitle>{title.toUpperCase()}</DynamicTitle>
+        <DynamicTitle
+          $animation={isAnimating}
+          onAnimationEnd={() => setIsAnimating(false)}
+        >
+          {title.toUpperCase()}
+        </DynamicTitle>
       </DynamicTitleContainer>
     </PageWrapper>
   );

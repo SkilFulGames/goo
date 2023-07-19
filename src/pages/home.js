@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled, { keyframes } from "styled-components";
 
 import SettingPopup from "../components/setting-popup";
+import SharePopup from "../components/share-popup";
 
 import { PageWrapper } from "../style/generic-styles";
 import gearFill from "../img/gear-fill.svg";
@@ -84,12 +85,12 @@ function Home() {
   const title = "goo";
 
   const [isSettingOpen, setIsSettingOpen] = useState(false);
+  const [isShareOpen, setIsShareOpen] = useState(false);
 
   return (
     <PageWrapper>
-      {isSettingOpen && (
-        <SettingPopup isOpen={isSettingOpen} setIsOpen={setIsSettingOpen} />
-      )}
+      {isSettingOpen && <SettingPopup setIsOpen={setIsSettingOpen} />}
+      {isShareOpen && <SharePopup setIsOpen={setIsShareOpen} />}
       <ButtonsContainer>
         <SVGSettingContainer onClick={() => setIsSettingOpen(true)}>
           <SVGSetting src={gearFill} alt="gear-fill" />
@@ -97,7 +98,7 @@ function Home() {
         <SVGPlayContainer>
           <SVGPlay src={playCircle} alt="play-circle" />
         </SVGPlayContainer>
-        <SVGShareContainer>
+        <SVGShareContainer onClick={() => setIsShareOpen(true)}>
           <SVGShare src={heartFill} alt="heart-fill" />
         </SVGShareContainer>
       </ButtonsContainer>

@@ -121,11 +121,10 @@ const DoneButton = styled.button`
   padding: 1% 15%;
 `;
 
-function SettingPopUp({ isOpen, setIsOpen }) {
+function SettingPopUp({ setIsOpen }) {
   const { game, setGame } = useContext(gameContext);
 
   const [isInfo, setIsInfo] = useState(false);
-  const [isHard, setIsHard] = useState(false);
   const [placeholder, setPlaceholder] = useState(0);
   const [displayPlaceholder, setDisplayPlaceholder] = useState(
     game.targetWord.length ? false : true

@@ -1,30 +1,18 @@
 import React from "react";
 import styled from "styled-components";
 
+import { Background } from "../style/generic-styles";
 import crossOrange from "../img/cross-orange.svg";
 import insta from "../img/insta.svg";
 import mail from "../img/envelope.svg";
 import github from "../img/github.svg";
-import sharesheet from "../img/share.svg";
 import joystick from "../img/joystick.svg";
 
-const Background = styled.div`
-  position: absolute;
-  z-index: 3;
-  top: 0;
-  left: 0;
-  display: flex;
-  width: 100%;
-  height: 100%;
-  justify-content: center;
-  align-items: center;
-  background: rgba(0, 0, 0, 0.5);
-`;
 const Root = styled.div`
   display: flex;
   flex-direction: column;
   width: 80%;
-  height: 75%;
+  height: 70%;
   background: #071f36;
   border: 3px solid #ff9233;
   border-radius: 10px;
@@ -47,11 +35,13 @@ const PopupBody = styled.div`
   align-items: center;
 `;
 const CustomH1 = styled.h1`
+  font-size: 250%;
   margin: 0;
   color: #ff9233;
 `;
 const CustomH3 = styled.h3`
-  color: white;
+  font-size: 150%;
+  color: #f5f5f5;
   padding: 0 10%;
   text-align: center;
 `;
@@ -64,6 +54,10 @@ const Row = styled.div`
 `;
 const CustomSVG = styled.img`
   width: 60px;
+`;
+const CustomP = styled.p`
+  color: #ff9233;
+  opacity: 0.3;
 `;
 
 function SharePopup({ setIsOpen }) {
@@ -98,19 +92,23 @@ function SharePopup({ setIsOpen }) {
           </Row>
         </PopupBody>
         <div
-          style={{ display: "flex", justifyContent: "flex-end", gap: "2px" }}
+          style={{
+            display: "flex",
+            gap: "2px",
+            paddingLeft: "10px",
+          }}
         >
-          <p>Made by</p>
+          <CustomP>Made by</CustomP>
           <img
             src={joystick}
             alt="skilful-logo"
             style={{
               width: "24px",
-              opacity: "90%",
+              opacity: "0.3",
               margin: "1%",
             }}
           />
-          <p>with love</p>
+          <CustomP>with bcp d'amour</CustomP>
         </div>
       </Root>
     </Background>

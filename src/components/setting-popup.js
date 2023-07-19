@@ -3,39 +3,26 @@ import styled, { keyframes } from "styled-components";
 
 import gameContext from "../context/game-context";
 
+import { Background } from "../style/generic-styles";
 import infoFill from "../img/info-fill.svg";
 import crossOrange from "../img/cross-orange.svg";
 
 const placeholders = [
-  "OUT 🕹️",
-  "KEN 🌲",
+  "KENDAMA 🌲",
   "SLACK 🧗",
   "SNOW 🏂",
   "SCOOT 🛴",
-  "... hehe <3",
+  "OUT 🕹️",
   "SKATE 🛹",
   "DIVE 🌊",
   "BIKE 🚲",
   "PEN ✍️",
-  "DANSE 💃",
 ];
 
-const Background = styled.div`
-  position: absolute;
-  z-index: 3;
-  top: 0;
-  left: 0;
-  display: flex;
-  width: 100%;
-  height: 100%;
-  justify-content: center;
-  align-items: center;
-  background: rgba(0, 0, 0, 0.5);
-`;
 const Root = styled.div`
   display: flex;
   width: 80%;
-  height: 75%;
+  height: 70%;
   background: #071f36;
   border: 3px solid #ff9233;
   border-radius: 10px;
@@ -60,7 +47,7 @@ const SVGInfoContainer = styled.div`
   justify-content: flex-end;
 `;
 const CustomLabel = styled.label`
-  color: white;
+  color: #f5f5f5;
   font-size: 120%;
 `;
 const CustomCheckbox = styled.input`
@@ -77,7 +64,7 @@ const flip = keyframes`
 `;
 const CustomPlaceholder = styled.p`
   position: absolute;
-  left: 40%;
+  left: 50%;
   animation: ${flip} 1s 0.7s infinite;
 `;
 const InfoContainer = styled.div`
@@ -111,7 +98,7 @@ const CustomH3 = styled.h3`
 const CustomP = styled.p`
   padding: 10% 5%;
   font-size: 120%;
-  color: white;
+  color: #f5f5f5;
 `;
 const DoneButton = styled.button`
   font-size: 175%;
@@ -205,7 +192,7 @@ function SettingPopUp({ setIsOpen }) {
               />
             </Row>
             <Row>
-              <p style={{ color: "white", fontSize: "120%" }}>Game Of</p>
+              <p style={{ color: "#F5F5F5", fontSize: "120%" }}>Game Of</p>
               {displayPlaceholder && (
                 <CustomPlaceholder>{`${placeholders[placeholder]}`}</CustomPlaceholder>
               )}
@@ -213,6 +200,7 @@ function SettingPopUp({ setIsOpen }) {
                 id="targetword"
                 type="text"
                 value={game.targetWord}
+                style={{ width: "40%" }}
                 onChange={(e) =>
                   setGame({ ...game, targetWord: e.target.value })
                 }
@@ -232,6 +220,7 @@ function SettingPopUp({ setIsOpen }) {
                   type="number"
                   min={1}
                   value={game.nbOfTry}
+                  style={{ width: "20%" }}
                   onChange={(e) =>
                     setGame({ ...game, nbOfTry: e.target.value })
                   }

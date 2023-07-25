@@ -40,8 +40,6 @@ const SVGPlay = styled.img`
   padding: 1.5%;
   width: 36px;
   height: 36px;
-  border: 1.5px solid #ff9233;
-  border-radius: 50%;
 `;
 const SVGShareContainer = styled.div`
   display: flex;
@@ -80,7 +78,7 @@ const DynamicTitle = styled.p`
           animation: ${zoomOut} 0.75s 0s forwards;
         `
       : css`
-          animation: ${zoom} 3s 0.2s forwards;
+          animation: ${zoom} 2s 0s forwards;
         `};
   margin: 0;
   font-size: 1000%;

@@ -2,18 +2,8 @@ import React, { useContext, useRef } from "react";
 import styled, { keyframes } from "styled-components";
 
 import playerContext from "../context/player-context";
+import { opacityAnim } from "../style/generic-styles";
 import xCircle from "../img/x-circle.svg";
-
-const slideFromTop = keyframes`
-  0% {
-    transform: translateY(-1000px);
-    opacity: 0;
-  }
-  100% {
-    transform: translateY(0);
-    opacity: 1;
-  } 
-`;
 
 const slideFromLeft = keyframes`
   0% {
@@ -39,7 +29,7 @@ const List = styled.div`
   flex-direction: column;
   width: 100%;
   height: 80%;
-  max-height: 325px;
+  max-height: 340px;
   align-items: center;
   overflow: auto;
   scroll-behavior: smooth;
@@ -53,15 +43,15 @@ const AddBtn = styled.button`
   background: #ff9233;
   border: none;
   border-radius: 5px;
+  animation: ${opacityAnim} 0.2s 0s linear;
 `;
 const Item = styled.div`
   display: flex;
   width: 75%;
   min-height: 70px;
-  justify-content: center;
   background: #f5f5f5;
   border-radius: 20px;
-  animation: ${slideFromTop} 0.2s;
+  animation: ${slideFromLeft} 0.1s;
 `;
 const Name = styled.input`
   padding: 0 0 0 2%;
@@ -81,7 +71,7 @@ const Remove = styled.button`
   border: none;
   border-radius: 20px;
   background: #f5f5f5;
-  animation: ${slideFromLeft} 0.2s 0.1s backwards;
+  animation: ${slideFromLeft} 0.1s 0s backwards;
 
   img {
     width: 75%;
@@ -89,6 +79,7 @@ const Remove = styled.button`
 `;
 
 function PlayerList() {
+  const positionRef = useRef(null);
   const { players, setPlayers } = useContext(playerContext);
 
   function addPlayer() {
@@ -146,10 +137,17 @@ function PlayerList() {
 
   return (
     <Container>
-      <AddBtn onClick={addPlayer}>Add Player</AddBtn>
+      <AddBtn
+        onClick={() => {
+          addPlayer();
+          positionRef?.current?.scrollIntoView();
+        }}
+      >
+        Add Player
+      </AddBtn>
       <List>
         {players.map((p, i) => (
-          <Item key={i}>
+          <Item key={i} ref={positionRef}>
             <Name
               type="text"
               value={p.name}

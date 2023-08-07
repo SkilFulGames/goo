@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 import PlayerList from "../components/player-list";
 
-import { PageWrapper } from "../style/generic-styles";
+import { PageWrapper, opacityAnim } from "../style/generic-styles";
 import chevron from "../img/chevronleft.svg";
 
 const Header = styled.div`
@@ -25,6 +25,7 @@ const CustomH1 = styled.h1`
   padding: 10%;
   font-size: 275%;
   color: #ff9233;
+  animation: ${opacityAnim} 0.2s 0s linear;
 `;
 const CustomBtn = styled.button`
   width: 60%;
@@ -36,6 +37,7 @@ const CustomBtn = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
+  animation: ${opacityAnim} 0.2s 0s linear;
 `;
 
 function Player() {

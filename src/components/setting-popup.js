@@ -49,6 +49,7 @@ const SVGInfoContainer = styled.div`
 const CustomLabel = styled.label`
   color: #f5f5f5;
   font-size: 120%;
+  user-select: none;
 `;
 const CustomCheckbox = styled.input`
   width: 20%;
@@ -66,6 +67,7 @@ const CustomPlaceholder = styled.p`
   position: absolute;
   left: 50%;
   animation: ${flip} 1s 0.7s infinite;
+  user-select: none;
 `;
 const InfoContainer = styled.div`
   display: flex;
@@ -73,6 +75,7 @@ const InfoContainer = styled.div`
   width: 100%;
   height: 100%;
   align-items: center;
+  user-select: none;
 `;
 const Header = styled.div`
   height: 10%;
@@ -94,11 +97,13 @@ const PopupBody = styled.div`
 const CustomH3 = styled.h3`
   font-size: 150%;
   color: #ff9233;
+  user-select: none;
 `;
 const CustomP = styled.p`
   padding: 10% 5%;
   font-size: 120%;
   color: #f5f5f5;
+  user-select: none;
 `;
 const DoneButton = styled.button`
   font-size: 175%;
@@ -192,7 +197,15 @@ function SettingPopUp({ setIsOpen }) {
               />
             </Row>
             <Row>
-              <p style={{ color: "#F5F5F5", fontSize: "120%" }}>Game Of</p>
+              <p
+                style={{
+                  color: "#F5F5F5",
+                  fontSize: "120%",
+                  userSelect: "none",
+                }}
+              >
+                Game Of
+              </p>
               {displayPlaceholder && (
                 <CustomPlaceholder>{`${placeholders[placeholder]}`}</CustomPlaceholder>
               )}

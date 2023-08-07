@@ -5,7 +5,7 @@ import styled, { keyframes, css } from "styled-components";
 import SettingPopup from "../components/setting-popup";
 import SharePopup from "../components/share-popup";
 
-import { PageWrapper } from "../style/generic-styles";
+import { PageWrapper, opacityAnim } from "../style/generic-styles";
 import gearFill from "../img/gear-fill.svg";
 import playCircle from "../img/play-circle.svg";
 import heartFill from "../img/heart.svg";
@@ -18,6 +18,7 @@ const ButtonsContainer = styled.div`
   width: 100%;
   height: 100%;
   justify-content: space-around;
+  animation: ${opacityAnim} 2s 0.2s backwards;
 `;
 const SVGSettingContainer = styled.div`
   height: 30%;

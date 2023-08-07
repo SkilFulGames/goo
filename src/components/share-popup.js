@@ -37,12 +37,14 @@ const PopupBody = styled.div`
 const CustomH1 = styled.h1`
   font-size: 250%;
   margin: 0;
+  user-select: none;
   color: #ff9233;
 `;
 const CustomH3 = styled.h3`
   font-size: 150%;
   color: #f5f5f5;
   padding: 0 10%;
+  user-select: none;
   text-align: center;
 `;
 const Row = styled.div`
@@ -58,6 +60,7 @@ const CustomSVG = styled.img`
 const CustomP = styled.p`
   color: #ff9233;
   opacity: 0.3;
+  user-select: none;
 `;
 
 function SharePopup({ setIsOpen }) {

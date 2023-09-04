@@ -2,12 +2,15 @@ import React, { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
+import Menu from "../components/game-menu";
+import DynamicSentence from "../components/dynamic-sentence";
+import PlayerItem from "../components/player-item";
+import EndGame from "../components/end-game";
+
 import TimerContext from "../context/time-context";
 import PlayerContext from "../context/player-context";
 import GameContext from "../context/game-context";
-import Menu from "../components/game-menu";
-import DynamicSentence from "../components/dynamic-sentence";
-import { PageWrapper, opacityAnim } from "../style/generic-styles";
+import { PageWrapper } from "../style/generic-styles";
 import chevron from "../img/chevronleft.svg";
 import menuSVG from "../img/list.svg";
 
@@ -33,144 +36,62 @@ const BtnContainer = styled.div`
   justify-content: space-evenly;
 `;
 const CustomBtn = styled.button`
-  height: 100%;
+  height: 75%;
   width: 25%;
   background: #ff9233;
+  font-size: 150%;
+  font-weight: bold;
   border: none;
   border-radius: 10px;
 `;
 const PlayerContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 95%;
   height: 60%;
-  justify-content: space-around;
+  max-height: 475px;
+  align-items: center;
+  overflow: auto;
+  scroll-behavior: smooth;
+  gap: 10px;
 `;
 
 function Game() {
   const navigate = useNavigate();
+
+  //Context
   const { timer, setTimer } = useContext(TimerContext);
   const { players, setPlayers } = useContext(PlayerContext);
   const { game, setGame } = useContext(GameContext);
 
   //States
   const [isOpen, setIsOpen] = useState(false);
-  const [currPlayerId, setCurrPlayerId] = useState(0);
   const [action, setAction] = useState("define");
+  const [currPlayerId, setCurrPlayerId] = useState(0);
   const [playersToCopy, setPlayersToCopy] = useState([]);
-  const [definerName, setDefinerName] = useState("");
   const [eliminatedPlayers, setEliminatedPlayers] = useState([]);
 
   //GameLogic
   function handleNo() {
-    if (action === "define") {
-      handleDefine();
-    } else {
-      const stillHaveTry = playersToCopy[currPlayerId].try !== 1;
-      if (stillHaveTry) {
-        handleTryUpdatedPlayers();
-      } else {
-        handleNoMoreTry();
-      }
-    }
+    setCurrPlayerId((currPlayerId + 1) % players.length);
   }
-
-  function handleDefine() {
-    if (lastToDefine()) {
-      let resetedPlayers = players.map((element) => {
-        if (element.name === players[currPlayerId].name) {
-          return {
-            ...element,
-            hasDefined: false,
-          };
-        } else {
-          return {
-            ...element,
-            hasDefined: false,
-          };
-        }
-      });
-      // resetedPlayers = incrementStat(
-      //   resetedPlayers,
-      //   players[currPlayerId].name,
-      //   "nbFailedDef"
-      // );
-      setPlayers(resetedPlayers);
-      setCurrPlayerId(0);
-    } else {
-      let nextPlayers = players.map((element) => {
-        if (element.name === players[currPlayerId].name) {
-          return {
-            ...element,
-            hasDefined: true,
-          };
-        } else {
-          return element;
-        }
-      });
-      // nextPlayers = incrementStat(
-      //   nextPlayers,
-      //   players[currPlayerId].name,
-      //   "nbFailedDef"
-      // );
-      let nextDefiner = null;
-      nextPlayers.some((el, id) => {
-        nextDefiner = id;
-        return !el.hasDefined;
-      });
-      setPlayers(nextPlayers);
-      setCurrPlayerId(nextDefiner ?? 0);
-    }
-  }
-
-  function lastToDefine() {
-    const playersWithoutCurr = players.filter(
-      (el) => el.name !== players[currPlayerId].name
-    );
-    let stillActive = 0;
-    for (const player of playersWithoutCurr) {
-      if (!player.hasDefined) {
-        stillActive++;
-      }
-    }
-    return stillActive === 0 ? true : false;
-  }
-
   function handleYes() {
-    if (action === "define") {
-      setActionToCopy();
-    } else {
-      setPlayersAndUpdateCurrId();
-    }
-  }
-
-  function setActionToCopy() {
+    handleNo();
     setAction("copy");
-    setCurrPlayerId(0);
-    setDefinerName(players[currPlayerId].name);
-    let nextPlayers = players.map((element) => {
-      if (element.name === players[currPlayerId].name) {
-        return {
-          ...element,
-          hasDefined: true,
-        };
-      } else {
-        return element;
-      }
-    });
-    // nextPlayers = incrementStat(
+    setPlayersToCopy(players.filter((p, index) => index !== currPlayerId));
+    // let nextPlayers = incrementStat(
     //   nextPlayers,
     //   players[currPlayerId].name,
     //   "nbDef"
     // );
-    setPlayers(nextPlayers);
+    // setPlayers(nextPlayers);
   }
 
   //Effects
   useEffect(() => {
     let interval = null;
 
-    if (timer.isActive && !timer.isPaused) {
+    if (timer.isActive && !timer.isPaused && game.isRunning) {
       interval = setInterval(() => {
         setTimer({ ...timer, timeCounter: timer.timeCounter + 1 });
       }, 1000);
@@ -182,7 +103,45 @@ function Game() {
     };
   }, [timer.isActive, timer.isPaused, timer.timeCounter]);
 
+  useEffect(() => {
+    if (action === "copy" && playersToCopy.length === 0) {
+      setAction("define");
+    }
+  }, [action, playersToCopy]);
+
+  useEffect(() => {
+    for (const player of players) {
+      if (player.letter === game.targetWord) {
+        const eliminated = [...eliminatedPlayers, player];
+        const nextPlayers = players.filter((p) => p.name !== player.name);
+        if (nextPlayers.length === 1) {
+          setPlayers([...players, ...eliminatedPlayers]);
+          setTimer({ ...timer, isPaused: true, isActive: false });
+          setGame({ ...game, isRunning: false });
+        } else {
+          setEliminatedPlayers(eliminated);
+          setPlayers(nextPlayers);
+        }
+      }
+    }
+  }, [JSON.stringify(players), eliminatedPlayers]);
+
   //Render
+  if (!game.isRunning) {
+    return (
+      <PageWrapper>
+        <Header>
+          <div
+            style={{ display: "flex", height: "100%" }}
+            onClick={() => navigate("/player")}
+          >
+            <img src={chevron} alt="goback" />
+          </div>
+        </Header>
+        <EndGame />
+      </PageWrapper>
+    );
+  }
   return (
     <PageWrapper>
       <Menu setIsOpen={setIsOpen} isOpen={isOpen} />
@@ -201,10 +160,7 @@ function Game() {
         </div>
       </Header>
       <Body>
-        <DynamicSentence
-          name={action === "define" ? players[currPlayerId].name : definerName}
-          action={action}
-        />
+        <DynamicSentence name={players[currPlayerId].name} action={action} />
         {action === "define" && (
           <BtnContainer>
             <CustomBtn onClick={handleNo}>No</CustomBtn>
@@ -212,11 +168,33 @@ function Game() {
           </BtnContainer>
         )}
         <PlayerContainer>
-          {players.map((p, i) => (
-            <div key={i}>
-              <p style={{ color: "#D9D9D9" }}>{p.name}</p>
-            </div>
-          ))}
+          {action === "define" ? (
+            <>
+              {players.map((p, i) => (
+                <PlayerItem
+                  key={i}
+                  idx={i}
+                  player={p}
+                  currPlayerId={currPlayerId}
+                  action={action}
+                />
+              ))}
+            </>
+          ) : (
+            <>
+              {playersToCopy.map((p, i) => (
+                <PlayerItem
+                  key={i}
+                  idx={i}
+                  player={p}
+                  currPlayerId={currPlayerId}
+                  action={action}
+                  playersToCopy={playersToCopy}
+                  setPlayersToCopy={setPlayersToCopy}
+                />
+              ))}
+            </>
+          )}
         </PlayerContainer>
       </Body>
     </PageWrapper>

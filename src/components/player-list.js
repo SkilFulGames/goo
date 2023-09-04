@@ -2,6 +2,7 @@ import React, { useContext, useRef } from "react";
 import styled, { keyframes } from "styled-components";
 
 import playerContext from "../context/player-context";
+import gameContext from "../context/game-context";
 import { opacityAnim } from "../style/generic-styles";
 import xCircle from "../img/x-circle.svg";
 
@@ -15,7 +16,6 @@ const slideFromLeft = keyframes`
     opacity: 1;
   } 
 `;
-
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -80,15 +80,17 @@ const Remove = styled.button`
 
 function PlayerList() {
   const positionRef = useRef(null);
+
   const { players, setPlayers } = useContext(playerContext);
+  const { game } = useContext(gameContext);
 
   function addPlayer() {
     const nextPlayer = {
       name: `Player ${players.length + 1}`,
       letter: "",
       position: players.length,
-      redo: false,
-      hasDefined: false,
+      redo: game.allowRedo,
+      nbOfTry: game.nbOfTry,
       stats: {
         nbDef: 0,
         nbFailedDef: 0,
@@ -99,7 +101,6 @@ function PlayerList() {
     };
     setPlayers([...players, nextPlayer]);
   }
-
   function setPlayerName(e, i) {
     setPlayers(
       players.map((player, idx) => {
@@ -111,7 +112,6 @@ function PlayerList() {
       })
     );
   }
-
   function resetPlayerName(i) {
     setPlayers(
       players.map((player, idx) => {
@@ -123,7 +123,6 @@ function PlayerList() {
       })
     );
   }
-
   function removePlayer(i) {
     const nextPlayers = players
       .filter((p, id) => i !== id)

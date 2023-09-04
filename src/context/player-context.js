@@ -7,7 +7,7 @@ export const initialPlayers = {
       letter: "",
       position: 1,
       redo: false,
-      hasDefined: false,
+      nbOfTry: 2,
       stats: {
         nbDef: 0,
         nbFailedDef: 0,
@@ -21,7 +21,7 @@ export const initialPlayers = {
       letter: "",
       position: 2,
       redo: false,
-      hasDefined: false,
+      nbOfTry: 2,
       stats: {
         nbDef: 0,
         nbFailedDef: 0,

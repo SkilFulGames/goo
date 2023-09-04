@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import styled, { keyframes } from "styled-components";
 
 import gameContext from "../context/game-context";
-
+import playerContext from "../context/player-context";
 import { Background } from "../style/generic-styles";
 import infoFill from "../img/info-fill.svg";
 import crossOrange from "../img/cross-orange.svg";
@@ -115,6 +115,7 @@ const DoneButton = styled.button`
 
 function SettingPopUp({ setIsOpen }) {
   const { game, setGame } = useContext(gameContext);
+  const { players, setPlayers } = useContext(playerContext);
 
   const [isInfo, setIsInfo] = useState(false);
   const [placeholder, setPlaceholder] = useState(0);
@@ -166,13 +167,12 @@ function SettingPopUp({ setIsOpen }) {
                 <CustomLabel htmlFor="hardmode">Hard Mode</CustomLabel>
               </div>
               <CustomCheckbox
-                {...(game.isHard ? { checked: "checked" } : "")}
                 id="hardmode"
                 type="checkbox"
-                value={game.isHard}
                 onChange={() => {
                   if (!game.isHard) {
-                    setGame({ ...game, isHard: !game.isHard, nbOfTry: 1 });
+                    setGame({ ...game, isHard: !game.isHard });
+                    setPlayers(players.map((p) => ({ ...p, nbOfTry: 1 })));
                   } else {
                     setGame({ ...game, isHard: !game.isHard });
                   }
@@ -187,13 +187,14 @@ function SettingPopUp({ setIsOpen }) {
                 <CustomLabel htmlFor="joker">Joker</CustomLabel>
               </div>
               <CustomCheckbox
-                {...(game.allowRedo ? { checked: "checked" } : "")}
                 id="joker"
                 type="checkbox"
-                value={game.allowRedo}
-                onChange={() =>
-                  setGame({ ...game, allowRedo: !game.allowRedo })
-                }
+                onChange={() => {
+                  setGame({ ...game, allowRedo: !game.allowRedo });
+                  setPlayers(
+                    players.map((p) => ({ ...p, redo: !game.allowRedo }))
+                  );
+                }}
               />
             </Row>
             <Row>
@@ -234,9 +235,12 @@ function SettingPopUp({ setIsOpen }) {
                   min={1}
                   value={game.nbOfTry}
                   style={{ width: "20%" }}
-                  onChange={(e) =>
-                    setGame({ ...game, nbOfTry: e.target.value })
-                  }
+                  onChange={(e) => {
+                    setPlayers(
+                      players.map((p) => ({ ...p, nbOfTry: e.target.value }))
+                    );
+                    setGame({ ...game, nbOfTry: e.target.value });
+                  }}
                 />
               </Row>
             )}

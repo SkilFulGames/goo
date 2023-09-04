@@ -4,10 +4,10 @@ import styled from "styled-components";
 
 import PlayerList from "../components/player-list";
 
-import { PageWrapper, opacityAnim } from "../style/generic-styles";
-import chevron from "../img/chevronleft.svg";
 import gameContext from "../context/game-context";
 import timeContext from "../context/time-context";
+import { PageWrapper, opacityAnim } from "../style/generic-styles";
+import chevron from "../img/chevronleft.svg";
 
 const Header = styled.div`
   display: flex;
@@ -44,8 +44,10 @@ const CustomBtn = styled.button`
 
 function Player() {
   const navigate = useNavigate();
+
   const { game, setGame } = useContext(gameContext);
   const { timer, setTimer } = useContext(timeContext);
+
   return (
     <PageWrapper>
       <Header>
@@ -61,7 +63,13 @@ function Player() {
         <PlayerList />
         <CustomBtn
           onClick={() => {
-            setGame({ ...game, isRunning: true });
+            setGame({
+              ...game,
+              isRunning: true,
+              targetWord: game.targetWord.length
+                ? game.targetWord
+                : game.defaultTargetWord,
+            });
             setTimer({ ...timer, isActive: true, isPaused: false });
             navigate("/game");
           }}

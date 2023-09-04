@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
 
+import timeContext from "../context/time-context";
 import cross from "../img/cross-bleu.svg";
 import play from "../img/play-fill.svg";
 import pause from "../img/pause-fill.svg";
 import restart from "../img/restart-fill.svg";
-import timeContext from "../context/time-context";
 
 const Background = styled.div`
   position: absolute;

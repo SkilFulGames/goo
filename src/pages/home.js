@@ -79,7 +79,7 @@ const DynamicTitle = styled.p`
           animation: ${zoomOut} 0.75s 0s forwards;
         `
       : css`
-          animation: ${zoom} 2s 0s forwards;
+          animation: ${zoom} 1.5s 0s forwards;
         `};
   margin: 0;
   font-size: 1000%;
@@ -98,9 +98,8 @@ const zoomOut = keyframes`
 `;
 
 function Home() {
-  const title = "goo";
-
   const navigate = useNavigate();
+  const title = "goo";
 
   const [isSettingOpen, setIsSettingOpen] = useState(false);
   const [isShareOpen, setIsShareOpen] = useState(false);

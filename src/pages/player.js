@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import PlayerList from "../components/player-list";
 
+import gameContext from "../context/game-context";
+import timeContext from "../context/time-context";
 import { PageWrapper, opacityAnim } from "../style/generic-styles";
 import chevron from "../img/chevronleft.svg";
 
@@ -42,6 +44,10 @@ const CustomBtn = styled.button`
 
 function Player() {
   const navigate = useNavigate();
+
+  const { game, setGame } = useContext(gameContext);
+  const { timer, setTimer } = useContext(timeContext);
+
   return (
     <PageWrapper>
       <Header>
@@ -55,7 +61,21 @@ function Player() {
       <Body>
         <CustomH1>Who Play ?</CustomH1>
         <PlayerList />
-        <CustomBtn onClick={() => navigate("/game")}>Start !</CustomBtn>
+        <CustomBtn
+          onClick={() => {
+            setGame({
+              ...game,
+              isRunning: true,
+              targetWord: game.targetWord.length
+                ? game.targetWord
+                : game.defaultTargetWord,
+            });
+            setTimer({ ...timer, isActive: true, isPaused: false });
+            navigate("/game");
+          }}
+        >
+          Start !
+        </CustomBtn>
       </Body>
     </PageWrapper>
   );

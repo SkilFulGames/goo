@@ -4,6 +4,7 @@ export const initialGame = {
   game: {
     isRunning: false,
     targetWord: "",
+    defaultTargetWord: "OUT",
     isHard: false,
     allowRedo: false,
     nbOfTry: 2,

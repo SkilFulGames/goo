@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  app:
+    restart: always
+    build: 
+      dockerfile: ./Dockerfile
+    ports: 
+      - '3000:3000'
+    volumes:
+      - static-files-prod:/GOO/build
+
+volumes:
+  static-files-prod:
